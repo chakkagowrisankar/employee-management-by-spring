@@ -13,4 +13,7 @@ public class EmployeeDao {
 	public Employee saveEmployee(Employee emp) {
 		return repoEmp.save(emp);
 	}
+	public Employee findByEmail(String email,String password) {
+		return repoEmp.findByEmail(email, password);
+	}
 }
