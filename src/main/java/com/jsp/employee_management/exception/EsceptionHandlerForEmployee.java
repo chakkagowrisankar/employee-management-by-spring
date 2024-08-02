@@ -18,4 +18,12 @@ public class EsceptionHandlerForEmployee {
 		rs.setMessage("can't perform operation");
 		return new ResponseEntity<ResponseStructure<String>>(rs, HttpStatus.BAD_REQUEST);
 	}
+	@ExceptionHandler(NotFoundException.class)
+	public ResponseEntity<ResponseStructure<String>> NotFoundException(NotFoundException e){
+		ResponseStructure<String> rs = new ResponseStructure<String>();
+		rs.setStateCode(HttpStatus.BAD_REQUEST.value());
+		rs.setData(e.getMessage());
+		rs.setMessage("can't perform operation");
+		return new ResponseEntity<ResponseStructure<String>>(rs, HttpStatus.BAD_REQUEST);
+	}
 }
