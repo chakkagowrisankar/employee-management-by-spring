@@ -1,7 +1,6 @@
 package com.jsp.employee_management.dao;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,8 +18,18 @@ public class EmployeeDao {
 	public Employee findByEmail(String email,String password) {
 		return repoEmp.findByEmail(email, password);
 	}
-	public String[] findAll(){
-		String[] s=repoEmp.find();
-		return s;
+	public Employee findByEmail(String email) {
+		return repoEmp.findByEmail(email);
+	}
+	public Employee findById(int id) {
+		Optional<Employee> e = repoEmp.findById(id);
+		if(e.isPresent()) {
+			return e.get();
+		}else {
+			return null;
+		}
+	}
+	public void deleteById(Employee e) {
+		repoEmp.delete(e);
 	}
 }

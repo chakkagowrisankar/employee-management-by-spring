@@ -8,6 +8,6 @@ import com.jsp.employee_management.entity.Employee;
 public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 	@Query("select a from Employee a where email=?1 and password=?2")
 	Employee findByEmail(String email,String password);
-	@Query("select email from Employee ")
-	String[] find();
+	@Query("select a from Employee a where email=?1")
+	Employee findByEmail(String email);
 }

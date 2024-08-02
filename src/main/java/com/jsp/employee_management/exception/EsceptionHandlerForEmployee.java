@@ -1,6 +1,7 @@
 package com.jsp.employee_management.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,11 +20,11 @@ public class EsceptionHandlerForEmployee {
 		return new ResponseEntity<ResponseStructure<String>>(rs, HttpStatus.BAD_REQUEST);
 	}
 	@ExceptionHandler(NotFoundException.class)
-	public ResponseEntity<ResponseStructure<String>> NotFoundException(NotFoundException e){
+	public ResponseEntity<ResponseStructure<String>> NotFoundException (NotFoundException e){
 		ResponseStructure<String> rs = new ResponseStructure<String>();
 		rs.setStateCode(HttpStatus.BAD_REQUEST.value());
 		rs.setData(e.getMessage());
-		rs.setMessage("can't perform operation");
-		return new ResponseEntity<ResponseStructure<String>>(rs, HttpStatus.BAD_REQUEST);
+		rs.setMessage("can't perform operation ...!");
+		return new ResponseEntity<ResponseStructure<String>> (rs,HttpStatus.BAD_REQUEST);
 	}
 }

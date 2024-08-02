@@ -30,8 +30,6 @@ public class EmailConfig {
 		String htmlContent = "<h1>This is a test Spring Boot email</h1>"
 				+ "<p>It can contain <strong>HTML</strong> content.</p>";
 		message.setContent(htmlContent, "text/html; charset=utf-8");
-
-		//messages.setText(es.getBody());
 		FileSystemResource file = new FileSystemResource(new File("ComposeCamp.png"));
 		messages.addAttachment("ComposeCamp.png", file);
 
