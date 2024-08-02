@@ -11,6 +11,8 @@ import com.jsp.employee_management.entity.Employee;
 import com.jsp.employee_management.service.EmployeeService;
 import com.jsp.employee_management.util.ResponseStructure;
 
+import jakarta.mail.MessagingException;
+
 @RestController
 public class EmployeeController {
 	@Autowired
@@ -19,5 +21,9 @@ public class EmployeeController {
 	public ResponseEntity<ResponseStructure<Emp>> saveEmployee(@RequestBody Employee emp){
 		return service.saveEmployee(emp);
 	}
-	
+	@PostMapping("/mail")
+	public void  sendEmail() throws MessagingException {
+		service.sendEmail();
+		
+	}
 }
