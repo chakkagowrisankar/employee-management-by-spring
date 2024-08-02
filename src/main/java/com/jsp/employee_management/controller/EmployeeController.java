@@ -18,12 +18,8 @@ public class EmployeeController {
 	@Autowired
 	EmployeeService service;
 	@PostMapping("/saveEmployee")
-	public ResponseEntity<ResponseStructure<Emp>> saveEmployee(@RequestBody Employee emp){
+	public ResponseEntity<ResponseStructure<Emp>> saveEmployee(@RequestBody Employee emp) throws MessagingException{
 		return service.saveEmployee(emp);
 	}
-	@PostMapping("/mail")
-	public void  sendEmail() throws MessagingException {
-		service.sendEmail();
-		
-	}
+	
 }
