@@ -33,30 +33,9 @@ public class EmployeeService {
 		ResponseStructure rs = new ResponseStructure();
 		rs.setStateCode(HttpStatus.CREATED.value());
 		rs.setMessage("Employee details saved Sucessfully..!");
-		Employee emp = dao.saveEmployee(e);
-		Emp em = mapper.map(emp, Emp.class);
-		rs.setData(em);
+		rs.setData(mapper.map(dao.saveEmployee(e), Emp.class));
 		return new ResponseEntity<ResponseStructure<Emp>>(rs, HttpStatus.CREATED);
 	}
 
-	@Autowired
-	JavaMailSender sender;
-	@Autowired
-	EmailSend es;
-
-	public void sendEmail() throws MessagingException {
-		MimeMessage message = sender.createMimeMessage();
-		MimeMessageHelper messages = new MimeMessageHelper(message, true);
-		messages.setTo(dao.findAll());
-		message.setSubject("Test email from Spring");
-		String htmlContent = "<h1>This is a test Spring Boot email</h1>"
-				+ "<p>It can contain <strong>HTML</strong> content.</p>";
-		message.setContent(htmlContent, "text/html; charset=utf-8");
-
-		//messages.setText(es.getBody());
-		FileSystemResource file = new FileSystemResource(new File("ComposeCamp.png"));
-		messages.addAttachment("ComposeCamp.png", file);
-
-		sender.send(message);
-	}
+	
 }
