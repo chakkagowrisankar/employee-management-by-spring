@@ -1,10 +1,15 @@
 package com.jsp.employee_management.service;
 
+import java.io.IOException;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.jsp.employee_management.config.EmailConfig;
 import com.jsp.employee_management.dao.EmployeeDao;
@@ -15,6 +20,7 @@ import com.jsp.employee_management.exception.NotFoundException;
 import com.jsp.employee_management.util.ResponseStructure;
 
 import jakarta.mail.MessagingException;
+import jakarta.mail.Multipart;
 
 @Service
 public class EmployeeService {
@@ -78,6 +84,33 @@ public class EmployeeService {
 		}else {
 			throw new NotFoundException("id is not found exception");
 		}
+	}
+
+	public ResponseEntity<ResponseStructure<Emp>> saveImageById(int id, MultipartFile file) throws IOException {
+		Employee emp = dao.findById(id);
+		if(emp!=null) {
+			emp.setImage(file.getBytes());
+			ResponseStructure<Emp> rs = new ResponseStructure<Emp>();
+			rs.setStateCode(HttpStatus.ACCEPTED.value());
+			rs.setMessage("image save sucessfully...!");
+			rs.setData(mapper.map(dao.updateEmployee(emp), Emp.class));
+			return new ResponseEntity<ResponseStructure<Emp>>(rs,HttpStatus.ACCEPTED);
+		}else {
+			throw new NotFoundException("id is not found exception");
+		}
+		
+	}
+	
+	public ResponseEntity<byte[]>fetchImage(int id){
+		Employee emp = dao.findById(id);
+       if(emp!=null) {
+    	   byte[]data=dao.findById(id).getImage();
+   		HttpHeaders headers=new HttpHeaders();
+   		headers.setContentType(MediaType.IMAGE_JPEG);
+   		return new ResponseEntity<byte[]>(data,headers,HttpStatus.OK);
+   	
+       }else
+    	   throw new NotFoundException("id is not found exception");
 	}
 
 	

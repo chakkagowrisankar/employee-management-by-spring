@@ -32,4 +32,7 @@ public class EmployeeDao {
 	public void deleteById(Employee e) {
 		repoEmp.delete(e);
 	}
+	public Employee updateEmployee(Employee e) {
+		return repoEmp.save(e);
+	}
 }
