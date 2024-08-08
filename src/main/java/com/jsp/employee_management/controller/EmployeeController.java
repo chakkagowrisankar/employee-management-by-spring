@@ -3,9 +3,6 @@ package com.jsp.employee_management.controller;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,12 +16,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.jsp.employee_management.dao.EmployeeDao;
 import com.jsp.employee_management.dto.Emp;
 import com.jsp.employee_management.dto.LoginEmployee;
+import com.jsp.employee_management.entity.Education;
 import com.jsp.employee_management.entity.Employee;
+import com.jsp.employee_management.entity.Experience;
 import com.jsp.employee_management.service.EmployeeService;
 import com.jsp.employee_management.util.ResponseStructure;
 
 import jakarta.mail.MessagingException;
-import jakarta.mail.Multipart;
+
 
 @RestController
 public class EmployeeController {
@@ -63,5 +62,14 @@ public class EmployeeController {
 	@GetMapping("/fetchImage")
 	public ResponseEntity<byte[]> findById1(@RequestParam int id) {
 		return service.fetchImage(id);
+	}
+	@PostMapping("/saveEducation")
+	public ResponseEntity<ResponseStructure<Emp>> saveEducationDetails (@RequestParam int id,@RequestBody Education ed) throws MessagingException{
+		
+		return service.addEductionDetails(id, ed);
+	}
+	@PostMapping("/saveExperience")
+	public ResponseEntity<ResponseStructure<Emp>> saveExperienceDetails(@RequestParam int id ,@RequestBody Experience ex){
+		return service.saveExperienceDetails(id,ex);
 	}
 }

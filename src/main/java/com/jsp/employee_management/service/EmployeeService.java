@@ -1,6 +1,8 @@
 package com.jsp.employee_management.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +17,13 @@ import com.jsp.employee_management.config.EmailConfig;
 import com.jsp.employee_management.dao.EmployeeDao;
 import com.jsp.employee_management.dto.Emp;
 import com.jsp.employee_management.dto.LoginEmployee;
+import com.jsp.employee_management.entity.Education;
 import com.jsp.employee_management.entity.Employee;
+import com.jsp.employee_management.entity.Experience;
 import com.jsp.employee_management.exception.NotFoundException;
 import com.jsp.employee_management.util.ResponseStructure;
 
 import jakarta.mail.MessagingException;
-import jakarta.mail.Multipart;
 
 @Service
 public class EmployeeService {
@@ -54,7 +57,7 @@ public class EmployeeService {
 				throw new NotFoundException("password is not found exception");
 			}
 		}else {
-			throw new NotFoundException("email is not found exception");
+			throw new NotFoundException("customer email "+login.getEmail()+"not found");
 		}
 	}
 	
@@ -104,13 +107,55 @@ public class EmployeeService {
 	public ResponseEntity<byte[]>fetchImage(int id){
 		Employee emp = dao.findById(id);
        if(emp!=null) {
-    	   byte[]data=dao.findById(id).getImage();
-   		HttpHeaders headers=new HttpHeaders();
-   		headers.setContentType(MediaType.IMAGE_JPEG);
-   		return new ResponseEntity<byte[]>(data,headers,HttpStatus.OK);
-   	
+    	   byte[]data=emp.getImage();
+    	   if(data!=null) {
+    		   HttpHeaders headers=new HttpHeaders();
+    	   		headers.setContentType(MediaType.IMAGE_JPEG);
+    	   		return new ResponseEntity<byte[]>(data,headers,HttpStatus.FOUND);
+    	   	
+    	   }
+    	   else
+        	   throw new NotFoundException("id is not found exception");
+
+   		
        }else
     	   throw new NotFoundException("id is not found exception");
+	}
+
+	public ResponseEntity<ResponseStructure<Emp>> addEductionDetails(int id, Education ed) throws MessagingException {
+		Employee emp = dao.findById(id);
+		if(emp.getEd()==null) {
+			List<Education> l = new ArrayList<Education>();
+			l.add(ed);
+			emp.setEd(l);
+		}else {
+			List<Education> l = emp.getEd();
+			l.add(ed);
+			emp.setEd(l);
+		}
+		ResponseStructure<Emp> rs = new ResponseStructure<Emp>();
+		rs.setStateCode(HttpStatus.CREATED.value());
+		rs.setMessage("Education details saved Sucessfully..!");
+		rs.setData(mapper.map(dao.saveEmployee(emp), Emp.class));
+		return new ResponseEntity<ResponseStructure<Emp>>(rs, HttpStatus.CREATED);
+	}
+
+	public ResponseEntity<ResponseStructure<Emp>> saveExperienceDetails(int id, Experience ex) {
+		Employee emp = dao.findById(id);
+		if(emp.getEd()==null) {
+			List<Experience> l = new ArrayList<Experience>();
+			l.add(ex);
+			emp.setEx(l);
+		}else {
+			List<Experience> l = emp.getEx();
+			l.add(ex);
+			emp.setEx(l);
+		}
+		ResponseStructure<Emp> rs = new ResponseStructure<Emp>();
+		rs.setStateCode(HttpStatus.CREATED.value());
+		rs.setMessage("Experience details saved Sucessfully..!");
+		rs.setData(mapper.map(dao.saveEmployee(emp), Emp.class));
+		return new ResponseEntity<ResponseStructure<Emp>>(rs, HttpStatus.CREATED);
 	}
 
 	
